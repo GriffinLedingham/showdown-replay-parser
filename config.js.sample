@@ -1,0 +1,5 @@
+/* eslint-disable */
+module.exports = {
+    // Setup a Google Sheet Script in Web API mode. Paste the URL to your API here
+    sheetAPI: "https://script.google.com/macros/s/SHEET_ID/exec"
+}

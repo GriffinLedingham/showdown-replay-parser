@@ -11,7 +11,15 @@ class sheetFetcher extends Fetcher {
     const replaySlugs = []
     console.log(sheetData)
     for(let i in sheetData) {
-      replaySlugs.push(sheetData[i].replay.replace('https://replay.pokemonshowdown.com', ''))
+      if(sheetData[i].replay1.indexOf('pokemonshowdown') > -1) {
+        replaySlugs.push(sheetData[i].replay1.replace('https://replay.pokemonshowdown.com', ''))
+      }
+      if(sheetData[i].replay2.indexOf('pokemonshowdown') > -1) {
+        replaySlugs.push(sheetData[i].replay2.replace('https://replay.pokemonshowdown.com', ''))
+      }
+      if(sheetData[i].replay3.indexOf('pokemonshowdown') > -1) {
+        replaySlugs.push(sheetData[i].replay3.replace('https://replay.pokemonshowdown.com', ''))
+      }
     }
     return replaySlugs
   }

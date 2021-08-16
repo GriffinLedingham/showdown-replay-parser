@@ -1,5 +1,22 @@
 import * as jsonfile from 'jsonfile'
 
+const AWS = require('aws-sdk')
+const ENV = process.env
+
+const ID = ENV.aws_id
+const SECRET = ENV.aws_secret
+const BUCKET_NAME = ENV.s3_bucket
+
+const IS_AWS = ID && SECRET && BUCKET_NAME
+
+let s3 = null
+if(IS_AWS) {
+  s3 = new AWS.S3({
+    accessKeyId: ID,
+    secretAccessKey: SECRET
+  });
+}
+
 class PokemonShowdownReplayParser {
   log = ""
   players = {}
@@ -159,11 +176,31 @@ class PokemonShowdownReplayParser {
     const file = `./log_output/battle-${format}-${id}.log.json`
 
     var fs = require('fs');
-    if (!fs.existsSync(file)) {
+    if (!IS_AWS && !fs.existsSync(file)) {
       console.log(`Writing file: ${file}`)
+
       jsonfile.writeFile(file, this.buildOutput(output), function (err) {
         if (err) console.error(err)
       })
+    } else if(IS_AWS) {
+      console.log(`Uploading file: ${file}`)
+      const dt = new Date();
+      const dateString = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate()
+
+      // write to s3
+      const params = {
+        Bucket: BUCKET_NAME,
+        Key: `battle-${format}/${dateString}/battle-${format}-${id}.log.json`,
+        Body: JSON.stringify(this.buildOutput(output))
+      };
+
+      // Uploading files to the bucket
+      s3.upload(params, function(err, data) {
+          if (err) {
+              throw err;
+          }
+          console.log(`File uploaded successfully. ${data.Location}`);
+      });
     }
   }
 

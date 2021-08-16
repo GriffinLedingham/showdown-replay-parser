@@ -25,7 +25,6 @@ class replayFetcher extends Fetcher {
       $('li a').each(function(i, elem) {
         slugs.push($(this).attr('href'))
       })
-      console.log(slugs)
       resolve(slugs)
     })
   }

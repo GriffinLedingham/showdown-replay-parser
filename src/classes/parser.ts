@@ -185,13 +185,14 @@ class PokemonShowdownReplayParser {
     } else if(IS_AWS) {
       console.log(`Uploading file: ${file}`)
       const dt = new Date();
+      const dateStringShort = dt.getFullYear() + "-" + (dt.getMonth() + 1)
       const dateString = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate()
 
       // write to s3
       const params = {
         Bucket: BUCKET_NAME,
-        Key: `battle-${format}/${dateString}/battle-${format}-${id}.log.json`,
-        Body: JSON.stringify(this.buildOutput(output))
+        Key: `battle-${format}/${dateStringShort}/${format}/${dateString}/battle-${format}-${id}.log.json`,
+      Body: JSON.stringify(this.buildOutput(output))
       };
 
       // Uploading files to the bucket

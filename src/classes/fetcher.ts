@@ -37,10 +37,11 @@ class fetcher {
         promises.push(this.getReplay(replaySlugs[i], format, server))
       } else if(IS_AWS && s3 != null) {
         const dt = new Date();
+        const dateStringShort = dt.getFullYear() + "-" + (dt.getMonth() + 1)
         const dateString = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate()
         const params = {
           Bucket: BUCKET_NAME,
-          Key: `battle-${format}/${dateString}/battle-${format}-${replaySlugs[i].replace(formatReplace,'')}.log.json`
+          Key: `battle-${format}/${dateStringShort}/${format}/${dateString}/battle-${format}-${replaySlugs[i].replace(formatReplace,'')}.log.json`
         }
         try {
           const s3Response = await s3.headObject(params).promise()//.catch(() => null)

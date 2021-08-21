@@ -17,7 +17,7 @@ function fetchLiveData() {
   const fetcher = new replayFetcher(format, numRecords, skip, server)
   setTimeout(()=>{
     fetchLiveData()
-  },60000)
+  },300000)
 }
 
 function fetchSheetData() {

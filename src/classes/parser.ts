@@ -88,6 +88,7 @@ class PokemonShowdownReplayParser {
         "moves": [
 
         ],
+        "teratype": "",
         "nature": "",
         "evs": {
           "hp": 0,
@@ -115,6 +116,7 @@ class PokemonShowdownReplayParser {
       }
       pokemonItem.item = jsonData.p1[i].item
       pokemonItem.ability = jsonData.p1[i].ability
+      pokemonItem.teratype = jsonData.p1[i].teratype
       pokemonList.push(pokemonItem)
 
     }
@@ -130,6 +132,7 @@ class PokemonShowdownReplayParser {
         "moves": [
 
         ],
+        "teratype": "",
         "nature": "",
         "evs": {
           "hp": 0,
@@ -157,6 +160,7 @@ class PokemonShowdownReplayParser {
       }
       pokemonItem.item = jsonData.p2[i].item
       pokemonItem.ability = jsonData.p2[i].ability
+      pokemonItem.teratype = jsonData.p2[i].teratype
       pokemonList2.push(pokemonItem)
     }
     returnData.p2team = pokemonList2
@@ -225,6 +229,10 @@ class PokemonShowdownReplayParser {
       if (line.startsWith("|move|"))
       {
         this.processMove(line)
+      }
+      if (line.startsWith("|-terastallize|"))
+      {
+        this.processTeraType(line);
       }
       if (line.startsWith("|-ability|"))
       {
@@ -358,6 +366,19 @@ class PokemonShowdownReplayParser {
     let pokemon = this.players[player].getPokemonByNickname(nickname)
     if(pokemon == undefined) return false
     pokemon.ability = ability
+  }
+
+  // |-terastallize|p2a: Baxcalibur|Dragon
+  processTeraType(line)
+  {
+    let matches = line.match(/\|-terastallize\|(p[12])[ab]:\s+([^|]+)\|([^|]+)/)
+    let player = matches[1]
+    let nickname = matches[2]
+    let teratype = matches[3]
+
+    let pokemon = this.players[player].getPokemonByNickname(nickname)
+    if(pokemon == undefined) return false
+    pokemon.teratype = teratype
   }
 
   processAbilityFromAction(line)
